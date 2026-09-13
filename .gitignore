@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+*.egg
+.env
+.DS_Store
+data/memories.json
+data/embeddings.db
+models/fine_tuned/
