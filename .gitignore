@@ -12,3 +12,4 @@ data/embeddings.db
 data/memory.db
 models/fine_tuned/
 training/data/processed/
+.env
