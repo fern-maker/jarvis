@@ -9,4 +9,6 @@ venv/
 .DS_Store
 data/memories.json
 data/embeddings.db
+data/memory.db
 models/fine_tuned/
+training/data/processed/
