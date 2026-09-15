@@ -13,7 +13,17 @@ python -m src.main
 
 ## Training Data
 
-Training data is in `training/data/raw/training_data.jsonl`
+Training data is in `training/data/raw`
+
+## Future improvements/features
+
+- Use voice cloning + synthesis or neural audio codecs to make Jarvis sound more natural.
+- Build custom web scraper.
+- Electron UI
+- Computer vision wake-up feature
+- Increase number of examples for training
+- Wake-word detection
+- LLM integration
 
 ## Deadline
 
