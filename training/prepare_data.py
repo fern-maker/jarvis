@@ -23,34 +23,44 @@ SHUFFLE_SEED = 42
 def load_examples(raw_dir: Path):
     examples = []
     skipped = Counter()
+    decoder = json.JSONDecoder()
 
     for path in sorted(glob.glob(str(raw_dir / "*.jsonl"))):
-        with open(path) as f:
-            for line in f:
-                line = line.strip()
-                if not line:
-                    continue
+        text = Path(path).read_text()
+        idx, length = 0, len(text)
 
-                try:
-                    obj = json.loads(line)
-                except json.JSONDecodeError:
-                    skipped["invalid_json"] += 1
-                    continue
+        while idx < length:
+            while idx < length and text[idx].isspace():
+                idx += 1
+            if idx >= length:
+                break
 
-                conversation = obj.get("conversation")
-                if not conversation or len(conversation) < 2:
-                    skipped["missing_or_short_conversation"] += 1
-                    continue
+            try:
+                obj, end = decoder.raw_decode(text, idx)
+            except json.JSONDecodeError:
+                # Entries may be pretty-printed across multiple lines, so a
+                # single malformed line doesn't tell us where the next valid
+                # entry starts; resync at the next blank line.
+                skipped["invalid_json"] += 1
+                next_blank = text.find("\n\n", idx)
+                idx = next_blank if next_blank != -1 else length
+                continue
+            idx = end
 
-                if any("role" not in turn or "content" not in turn for turn in conversation):
-                    skipped["malformed_turn"] += 1
-                    continue
+            conversation = obj.get("conversation")
+            if not conversation or len(conversation) < 2:
+                skipped["missing_or_short_conversation"] += 1
+                continue
 
-                examples.append({
-                    "conversation": conversation,
-                    "primary_category": obj.get("primary_category", "general"),
-                    "difficulty": obj.get("difficulty", "medium"),
-                })
+            if any("role" not in turn or "content" not in turn for turn in conversation):
+                skipped["malformed_turn"] += 1
+                continue
+
+            examples.append({
+                "conversation": conversation,
+                "primary_category": obj.get("primary_category", "general"),
+                "difficulty": obj.get("difficulty", "medium"),
+            })
 
     return examples, skipped
 
