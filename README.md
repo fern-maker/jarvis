@@ -26,6 +26,7 @@ Training data is in `training/data/raw`
 - LLM integration
 - take inspiration from https://github.com/ytnrvdf/wha-spell-simulator.git
 - take inspiration from https://github.com/debpalash/VoiceStudio.git
+- Be able to pick between a model that offers brief responses, or a model that offers elaborate responses.
 
 
 ## Deadline
