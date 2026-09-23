@@ -24,6 +24,9 @@ Training data is in `training/data/raw`
 - Increase number of examples for training
 - Wake-word detection
 - LLM integration
+- take inspiration from https://github.com/ytnrvdf/wha-spell-simulator.git
+- take inspiration from https://github.com/debpalash/VoiceStudio.git
+
 
 ## Deadline
 

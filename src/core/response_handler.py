@@ -10,11 +10,16 @@ def strip_code_for_speech(text: str) -> str:
     return speech_text.strip()
 
 
-def prepare_response(text: str) -> tuple[str, str]:
+def prepare_response(user_input: str, text: str) -> tuple[str, str]:
     """Split an assistant response into (speech_text, display_text).
 
     display_text is the original response, unchanged, so the user can still
     read any code. speech_text has fenced code blocks replaced with a short
     placeholder so Jarvis doesn't read code aloud.
     """
+    # Special case: user just said the wake word with no real command, and
+    # the model came back with little to say. Skip the code stripping since
+    # it's a fixed short reply.
+    if user_input.strip().lower() in {"jarvis", "jarvis.", "jarvis?"} and (not text or len(text) < 5):
+        return "Sir.", "Sir."
     return strip_code_for_speech(text), text
